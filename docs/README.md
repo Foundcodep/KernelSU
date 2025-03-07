@@ -8,21 +8,21 @@
 >
 > 这是非官方分叉，保留所有权利 [@tiann](https://github.com/tiann)
 
-- 已经完全适配非GKI设备,分支为nongki_susfs
+- 已经完全适配非GKI设备
 
 ## 如何添加
 ```
-curl -LSs "https://raw.githubusercontent.com/ShirkNeko/KernelSU/susfs/kernel/setup.sh" | bash -s susfs
+curl -LSs "https://raw.githubusercontent.com/ShirkNeko/KernelSU/susfs/kernel/setup.sh" | bash -s susfs_patch
 ```
 
 
 
 ## 如何使用 
 
+直接使用susfs_patch不需要打任何补丁
 
 
-
-
+或者使用默认susfs分支进行补丁，文件在ptach里
 
 ## 更多链接
 基于MKSU-SKN和susfs编译的项目
