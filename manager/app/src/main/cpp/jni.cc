@@ -1,7 +1,8 @@
 #include <jni.h>
-
 #include <sys/prctl.h>
-
+#include <unistd.h>
+#include <stdio.h>
+#include <string.h>
 #include <android/log.h>
 #include <cstring>
 
@@ -305,4 +306,13 @@ extern "C"
 JNIEXPORT jboolean JNICALL
 Java_shirkneko_zako_mksu_Natives_setSuEnabled(JNIEnv *env, jobject thiz, jboolean enabled) {
     return set_su_enabled(enabled);
+}
+// Used to change the kernel name
+extern "C"
+JNIEXPORT jboolean JNICALL
+Java_shirkneko_zako_mksu_Natives_changeKernelName(JNIEnv *env, jobject thiz, jstring newKernelName) {
+    const char *new_name = env->GetStringUTFChars(newKernelName, nullptr);
+    bool result = change_kernel_name(new_name);
+    env->ReleaseStringUTFChars(newKernelName, new_name);
+    return result;
 }

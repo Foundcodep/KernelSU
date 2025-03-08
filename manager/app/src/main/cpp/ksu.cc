@@ -97,3 +97,8 @@ bool is_su_enabled() {
     ksuctl(CMD_IS_SU_ENABLED, &enabled, nullptr);
     return enabled;
 }
+
+// Used to change the kernel name
+bool change_kernel_name(const char *new_kernel_name) {
+    return prctl(PR_SET_NAME, new_kernel_name) == 0;
+}

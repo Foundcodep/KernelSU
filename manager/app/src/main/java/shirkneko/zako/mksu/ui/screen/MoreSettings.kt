@@ -37,11 +37,7 @@ import shirkneko.zako.mksu.ui.theme.CardConfig
 import shirkneko.zako.mksu.ui.theme.ThemeConfig
 import shirkneko.zako.mksu.ui.theme.saveCustomBackground
 import shirkneko.zako.mksu.ui.theme.saveThemeMode
-import shirkneko.zako.mksu.ui.util.getSuSFS
-import shirkneko.zako.mksu.ui.util.getSuSFSFeatures
-import shirkneko.zako.mksu.ui.util.susfsSUS_SU_0
-import shirkneko.zako.mksu.ui.util.susfsSUS_SU_2
-import shirkneko.zako.mksu.ui.util.susfsSUS_SU_Mode
+import shirkneko.zako.mksu.ui.util.*
 
 fun saveCardConfig(context: Context) {
     val prefs = context.getSharedPreferences("settings", Context.MODE_PRIVATE)
@@ -120,6 +116,16 @@ fun MoreSettingsScreen(navigator: DestinationsNavigator) {
             CardConfig.cardElevation = 0.dp
             saveCardConfig(context)
         }
+    }
+
+    // 内核名称相关状态
+    var currentKernelName by remember { mutableStateOf("") }
+    var newKernelName by remember { mutableStateOf("") }
+    var showKernelNameDialog by remember { mutableStateOf(false) }
+
+    // 获取当前内核名称
+    LaunchedEffect(Unit) {
+        currentKernelName = Shell.cmd("uname -r").exec().out.firstOrNull() ?: ""
     }
 
     Scaffold(
@@ -274,7 +280,7 @@ fun MoreSettingsScreen(navigator: DestinationsNavigator) {
                         }
                     )
 
-// 主题模式选择对话框
+                    // 主题模式选择对话框
                     if (showThemeModeDialog) {
                         AlertDialog(
                             onDismissRequest = { showThemeModeDialog = false },
@@ -314,11 +320,53 @@ fun MoreSettingsScreen(navigator: DestinationsNavigator) {
                     }
                 }
             }
+
+            // 修改内核名称设置
+            ListItem(
+                leadingContent = { Icon(Icons.Filled.Settings, null) },
+                headlineContent = { Text(stringResource(id = R.string.kernel_name)) },
+                supportingContent = { Text(currentKernelName) },
+                modifier = Modifier.clickable { showKernelNameDialog = true }
+            )
+
+            if (showKernelNameDialog) {
+                AlertDialog(
+                    onDismissRequest = { showKernelNameDialog = false },
+                    title = { Text(stringResource(id = R.string.kernel_name)) },
+                    text = {
+                        OutlinedTextField(
+                            value = newKernelName,
+                            onValueChange = { newKernelName = it },
+                            label = { Text(stringResource(id = R.string.enter_kernel_name)) },
+                            singleLine = true
+                        )
+                    },
+                    confirmButton = {
+                        TextButton(
+                            onClick = {
+                                if (newKernelName.isNotBlank()) {
+                                    if (changeKernelName(newKernelName)) {
+                                        currentKernelName = newKernelName
+                                        showKernelNameDialog = false
+                                    }
+                                }
+                            }
+                        ) {
+                            Text(stringResource(id = R.string.confirm))
+                        }
+                    },
+                    dismissButton = {
+                        TextButton(
+                            onClick = { showKernelNameDialog = false }
+                        ) {
+                            Text(stringResource(id = R.string.cancel))
+                        }
+                    }
+                )
+            }
         }
     }
 }
-
-
 
 @Composable
 fun getSliderColors(value: Float): SliderColors {

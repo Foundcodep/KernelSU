@@ -187,5 +187,7 @@
     <string name="selinux_enabled">强制执行</string>
     <string name="selinux_disabled">兼容模式</string>
     <string name="simple_mode">简洁模式</string>
+    <string name="kernel_name">内核名称</string>
+    <string name="enter_kernel_name">请输入新的内核名称</string>
     <string name="simple_mode_summary">开启后将隐藏不必要的卡片</string>
 </resources>

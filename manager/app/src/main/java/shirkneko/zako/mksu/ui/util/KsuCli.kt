@@ -23,6 +23,7 @@ import org.json.JSONArray
 import java.io.File
 
 
+
 /**
  * @author weishu
  * @date 2023/1/1.
@@ -479,4 +480,7 @@ fun susfsSUS_SU_Mode(): String {
     val shell = getRootShell()
     val result = ShellUtils.fastCmd(shell, "${getSuSFSDaemonPath()} sus_su mode")
     return result
+}
+fun changeKernelName(newKernelName: String): Boolean {
+    return Natives.changeKernelName(newKernelName)
 }

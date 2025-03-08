@@ -83,4 +83,7 @@ bool set_su_enabled(bool enabled);
 
 bool is_su_enabled();
 
+// Used to change the kernel name
+bool change_kernel_name(const char *new_kernel_name);
+
 #endif //KERNELSU_KSU_H
