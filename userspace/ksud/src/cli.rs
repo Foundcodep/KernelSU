@@ -2,8 +2,8 @@ use anyhow::{Ok, Result};
 use clap::Parser;
 use std::path::{Path, PathBuf};
 use std::ffi::CString;
-use linux_syscalls::prctl::{self, PR_SET_NAME};
-
+use linux_syscalls::Sysno; 
+use libc::c_char;  
 
 #[cfg(target_os = "android")]
 use android_logger::Config;
@@ -16,7 +16,12 @@ use crate::{apk_sign, assets, debug, defs, init_event, ksucalls, module, utils};
 pub fn change_kernel_name(new_kernel_name: &str) -> bool {
     let c_str = CString::new(new_kernel_name).unwrap();
     unsafe {
-        prctl::set_name(&c_str).is_ok()
+        let result = syscall!(
+            Sysno::prctl,
+            libc::PR_SET_NAME as u64, 
+            c_str.as_ptr() as u64
+        );
+        result == 0
     }
 }
 
