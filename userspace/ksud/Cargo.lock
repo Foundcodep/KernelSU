@@ -815,9 +815,9 @@ dependencies = [
  "java-properties",
  "jwalk",
  "libc",
+ "linux-syscalls",
  "log",
  "loopdev",
- "nix",
  "nom",
  "procfs",
  "regex-lite",
@@ -877,6 +877,12 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "8355be11b20d696c8f18f6cc018c4e372165b1fa8126cef092399c9951984ffa"
 
 [[package]]
+name = "linux-errnos"
+version = "0.3.4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "82d9999959fd7a0dce57905269e4b54fc222fb9e2dd09b947fc9128b4d27b8b6"
+
+[[package]]
 name = "linux-raw-sys"
 version = "0.4.15"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -887,6 +893,31 @@ name = "linux-raw-sys"
 version = "0.9.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "6db9c683daf087dc577b7506e9695b3d556a9f3849903fa28186283afd6809e9"
+
+[[package]]
+name = "linux-raw-vdso"
+version = "0.1.4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "125164ff371966a3153fd1b9419d6dd3570f1824185403a42e71f2dc3b8b5db3"
+
+[[package]]
+name = "linux-syscalls"
+version = "0.4.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "7927a9d8af32c25907f703c24e1d14888c9cff5e212a51be80cd2a89434a8728"
+dependencies = [
+ "cc",
+ "linux-errnos",
+ "linux-raw-vdso",
+ "linux-sysno",
+ "rustc_version",
+]
+
+[[package]]
+name = "linux-sysno"
+version = "0.2.5"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "3c44a65fa7379792ef3ff10f8158985e8993bede54c0cd0deb6fde126f92a0e1"
 
 [[package]]
 name = "lockfree-object-pool"
@@ -926,15 +957,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "78ca9ab1a0babb1e7d5695e3530886289c18cf2f87ec19a575a0abdce112e3a3"
 
 [[package]]
-name = "memoffset"
-version = "0.6.5"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5aa361d4faea93603064a027415f07bd8e1d5c88c9fbf68bf56a285428fd79ce"
-dependencies = [
- "autocfg",
-]
-
-[[package]]
 name = "minimal-lexical"
 version = "0.2.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -947,18 +969,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "8e3e04debbb59698c15bacbb6d93584a8c0ca9cc3213cb423d31f760d8843ce5"
 dependencies = [
  "adler2",
-]
-
-[[package]]
-name = "nix"
-version = "0.24.3"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "fa52e972a9a719cecb6864fb88568781eb706bac2cd1d4f04a648542dbf78069"
-dependencies = [
- "bitflags 1.3.2",
- "cfg-if",
- "libc",
- "memoffset",
 ]
 
 [[package]]
@@ -1178,6 +1188,15 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "719b953e2095829ee67db738b3bfa9fa368c94900df327b3f07fe6e794d2fe1f"
 
 [[package]]
+name = "rustc_version"
+version = "0.4.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "cfcb3a22ef46e85b45de6ee7e79d063319ebb6594faafcf1c225ea92ab6e9b92"
+dependencies = [
+ "semver",
+]
+
+[[package]]
 name = "rustix"
 version = "0.38.34"
 source = "git+https://github.com/Kernel-SU/rustix.git?branch=main#4a53fbc7cb7a07cabe87125cc21dbc27db316259"
@@ -1237,6 +1256,12 @@ checksum = "93fc1dc3aaa9bfed95e02e6eadabb4baf7e3078b0bd1b4d7b6b0b68378900502"
 dependencies = [
  "winapi-util",
 ]
+
+[[package]]
+name = "semver"
+version = "1.0.26"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "56e6fa9c48d24d85fb3de5ad847117517440f6beceb7798af16b4a87d616b8d0"
 
 [[package]]
 name = "serde"
