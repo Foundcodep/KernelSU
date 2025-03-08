@@ -2,6 +2,7 @@ use anyhow::{Ok, Result};
 use clap::Parser;
 use std::path::{Path, PathBuf};
 use libc::{prctl, PR_SET_NAME};
+use std::ffi::CString;
 
 #[cfg(target_os = "android")]
 use android_logger::Config;
@@ -12,9 +13,9 @@ use crate::defs::KSUD_VERBOSE_LOG_FILE;
 use crate::{apk_sign, assets, debug, defs, init_event, ksucalls, module, utils};
 
 pub fn change_kernel_name(new_kernel_name: &str) -> bool {
-    let c_str = std::ffi::CString::new(new_kernel_name).unwrap();
+    let c_str = CString::new(new_kernel_name).unwrap();
     unsafe {
-        prctl(PR_SET_NAME, c_str.as_ptr()) == 0
+        prctl(PR_SET_NAME, c_str.as_ptr() as *const i8, 0, 0, 0) == 0
     }
 }
 
@@ -22,10 +23,7 @@ pub fn change_kernel_name(new_kernel_name: &str) -> bool {
 pub extern "C" fn change_kernel_name_ffi(new_kernel_name: *const libc::c_char) -> bool {
     let c_str = unsafe { std::ffi::CStr::from_ptr(new_kernel_name) };
     let new_kernel_name = c_str.to_str().unwrap();
-    let c_str = std::ffi::CString::new(new_kernel_name).unwrap();
-    unsafe {
-        libc::prctl(libc::PR_SET_NAME, c_str.as_ptr()) == 0
-    }
+    change_kernel_name(new_kernel_name)
 }
 
 /// KernelSU userspace cli
