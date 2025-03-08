@@ -1,9 +1,7 @@
 use anyhow::{Ok, Result};
 use clap::Parser;
 use std::path::{Path, PathBuf};
-use std::ffi::CString;
-
-use nix::sys::prctl;
+use nix::prctl;
 
 #[cfg(target_os = "android")]
 use android_logger::Config;
