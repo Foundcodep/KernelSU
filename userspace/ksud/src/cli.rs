@@ -2,8 +2,8 @@ use anyhow::{Ok, Result};
 use clap::Parser;
 use std::path::{Path, PathBuf};
 use std::ffi::CString;
-use prctl::prctl;
-use prctl::PrCtlOption;
+use nix::sys::prctl;
+
 
 #[cfg(target_os = "android")]
 use android_logger::Config;
@@ -17,12 +17,12 @@ use crate::{apk_sign, assets, debug, defs, init_event, ksucalls, module, utils};
 pub fn change_kernel_name(new_kernel_name: &str) -> bool {
     let c_str = CString::new(new_kernel_name).unwrap();
     unsafe {
-        prctl(PrCtlOption::PR_SET_NAME, c_str.as_ptr() as usize, 0, 0, 0) == 0
+        prctl::set_name(c_str.as_ptr()).is_ok()
     }
 }
 
 #[no_mangle]
-pub extern "C" fn change_kernel_name_ffi(new_kernel_name: *const libc::c_char) -> bool {
+pub extern "C" fn change_kernel_name(new_kernel_name: *const libc::c_char) -> bool {
     let c_str = unsafe { std::ffi::CStr::from_ptr(new_kernel_name) };
     let new_kernel_name = c_str.to_str().unwrap();
     change_kernel_name(new_kernel_name)
