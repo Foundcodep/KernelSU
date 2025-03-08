@@ -1,7 +1,6 @@
 use anyhow::{Ok, Result};
 use clap::Parser;
 use std::path::{Path, PathBuf};
-use anyhow::Result;
 use std::ffi::CString;
 use prctl::prctl;
 use prctl::PrCtlOption;
