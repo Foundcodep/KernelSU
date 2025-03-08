@@ -22,7 +22,10 @@ pub fn change_kernel_name(new_kernel_name: &str) -> bool {
 pub extern "C" fn change_kernel_name_ffi(new_kernel_name: *const libc::c_char) -> bool {
     let c_str = unsafe { std::ffi::CStr::from_ptr(new_kernel_name) };
     let new_kernel_name = c_str.to_str().unwrap();
-    prctl::set_name(new_kernel_name).is_ok()
+    let c_str = std::ffi::CString::new(new_kernel_name).unwrap();
+    unsafe {
+        libc::prctl(libc::PR_SET_NAME, c_str.as_ptr()) == 0
+    }
 }
 
 /// KernelSU userspace cli
