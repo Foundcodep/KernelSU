@@ -1,7 +1,7 @@
 use anyhow::{Ok, Result};
 use clap::Parser;
 use std::path::{Path, PathBuf};
-use nix::prctl;
+use libc::{prctl, PR_SET_NAME};
 
 #[cfg(target_os = "android")]
 use android_logger::Config;
@@ -12,7 +12,10 @@ use crate::defs::KSUD_VERBOSE_LOG_FILE;
 use crate::{apk_sign, assets, debug, defs, init_event, ksucalls, module, utils};
 
 pub fn change_kernel_name(new_kernel_name: &str) -> bool {
-    prctl::set_name(new_kernel_name).is_ok()
+    let c_str = std::ffi::CString::new(new_kernel_name).unwrap();
+    unsafe {
+        prctl(PR_SET_NAME, c_str.as_ptr()) == 0
+    }
 }
 
 #[no_mangle]
